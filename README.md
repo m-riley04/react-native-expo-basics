@@ -4,12 +4,16 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 The following have been set up for you:
 
-- `i18next`
-- `jest`
+- `i18next` and basic translations
+- `jest` and basic tests
 - `prettier`
 - `eslint`
-- `react-query` (TanStack query)
-- VSCode workspace files
+- `@tanstack/react-query` (TanStack query)
+- `babel`
+- `.npmrc`
+- `react-native-svg` and a custom icon base component
+- custom `useTheme` hook
+- VSCode workspace files ([`.vscode`](.vscode))
 
 ## Recommended Dev Tools
 
@@ -24,7 +28,7 @@ The following have been set up for you:
    pnpm install
    ```
 
-2. Start the app with:
+2. Build and start the app with:
 
    ```bash
    pnpm start
@@ -49,4 +53,3 @@ To learn more about developing your project with Expo, look at the following res
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
