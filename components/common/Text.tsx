@@ -1,60 +1,65 @@
 import { Text as RNText, StyleSheet, type TextProps } from 'react-native';
 
-import { useThemeColor } from '@/theme';
+import { TextType, TextTypeStyles } from '@/constants';
+
+import { useTheme } from '@/theme';
+import { useCallback, useMemo } from 'react';
 
 export type CustomTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
-  type?: 'default' | 'title' | 'defaultSemiBold' | 'subtitle' | 'link';
+  type?: TextType;
 };
 
+/**
+ * Custom Text component that applies styles based on the provided type and current theme.
+ * @returns
+ */
 export function Text({
   style,
-  lightColor,
-  darkColor,
-  type = 'default',
+  type = TextType.Default,
   ...rest
 }: CustomTextProps) {
-  const color = useThemeColor({ light: lightColor, dark: darkColor }, 'text');
+  const theme = useTheme();
 
-  return (
-    <RNText
-      style={[
-        { color },
-        type === 'default' ? styles.default : undefined,
-        type === 'title' ? styles.title : undefined,
-        type === 'defaultSemiBold' ? styles.defaultSemiBold : undefined,
-        type === 'subtitle' ? styles.subtitle : undefined,
-        type === 'link' ? styles.link : undefined,
-        style,
-      ]}
-      {...rest}
-    />
+  /**
+   * Gets the text style based on the provided type.
+   */
+  const getTextStyle = useCallback(
+    (type: TextType) => {
+      switch (type) {
+        case TextType.Title:
+          return styles.title;
+        case TextType.DefaultSemiBold:
+          return styles.defaultSemiBold;
+        case TextType.Subtitle:
+          return styles.subtitle;
+        case TextType.Link:
+          return styles.link;
+        case TextType.Default:
+        default:
+          return styles.default;
+      }
+    },
+    [theme.link]
   );
+
+  /**
+   * Combines the base text style with the type-specific style and theme colors.
+   */
+  const textStyle = useMemo(() => {
+    return [
+      { color: type === TextType.Link ? theme.link : theme.text },
+      getTextStyle(type),
+      style,
+    ];
+  }, [type, getTextStyle]);
+
+  return <RNText style={textStyle} {...rest} />;
 }
 
 const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: '600',
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-    color: '#0a7ea4',
-  },
+  default: TextTypeStyles.default,
+  defaultSemiBold: TextTypeStyles.defaultSemiBold,
+  title: TextTypeStyles.title,
+  subtitle: TextTypeStyles.subtitle,
+  link: TextTypeStyles.link,
 });

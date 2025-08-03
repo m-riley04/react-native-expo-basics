@@ -13,3 +13,5 @@ jest.mock('expo-font', () => ({
 }));
 
 jest.mock('@/theme', () => jest.requireActual('@/theme'));
+
+jest.mock('@/constants', () => jest.requireActual('@/constants'));

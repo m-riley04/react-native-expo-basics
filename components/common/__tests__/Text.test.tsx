@@ -1,23 +1,9 @@
-import { useThemeColor } from '@/theme';
+import { TextType, TextTypeStyles } from '@/constants';
 import { render } from '@testing-library/react-native';
 import React from 'react';
 import { Text } from '../Text';
 
-// Mock the theme hook
-jest.mock('@/theme', () => ({
-  useThemeColor: jest.fn(),
-}));
-
-const mockUseThemeColor = useThemeColor as jest.MockedFunction<
-  typeof useThemeColor
->;
-
 describe('<Text />', () => {
-  beforeEach(() => {
-    // Reset mocks before each test
-    mockUseThemeColor.mockReturnValue('#000000');
-  });
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -34,10 +20,7 @@ describe('<Text />', () => {
       expect(textElement).toBeTruthy();
       expect(textElement.props.style).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 16,
-            lineHeight: 24,
-          }),
+          expect.objectContaining(TextTypeStyles.default),
         ])
       );
     });
@@ -63,129 +46,56 @@ describe('<Text />', () => {
 
   describe('Text Types', () => {
     it('renders default type with correct styles', () => {
-      const { getByText } = render(<Text type='default'>Default Text</Text>);
+      const { getByText } = render(
+        <Text type={TextType.Default}>Default Text</Text>
+      );
       const textElement = getByText('Default Text');
       expect(textElement.props.style).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 16,
-            lineHeight: 24,
-          }),
+          expect.objectContaining(TextTypeStyles.default),
         ])
       );
     });
 
     it('renders title type with correct styles', () => {
-      const { getByText } = render(<Text type='title'>Title Text</Text>);
+      const { getByText } = render(
+        <Text type={TextType.Title}>Title Text</Text>
+      );
       const textElement = getByText('Title Text');
       expect(textElement.props.style).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 32,
-            fontWeight: 'bold',
-            lineHeight: 32,
-          }),
-        ])
+        expect.arrayContaining([expect.objectContaining(TextTypeStyles.title)])
       );
     });
 
     it('renders defaultSemiBold type with correct styles', () => {
       const { getByText } = render(
-        <Text type='defaultSemiBold'>SemiBold Text</Text>
+        <Text type={TextType.DefaultSemiBold}>SemiBold Text</Text>
       );
       const textElement = getByText('SemiBold Text');
       expect(textElement.props.style).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 16,
-            lineHeight: 24,
-            fontWeight: '600',
-          }),
+          expect.objectContaining(TextTypeStyles.defaultSemiBold),
         ])
       );
     });
 
     it('renders subtitle type with correct styles', () => {
-      const { getByText } = render(<Text type='subtitle'>Subtitle Text</Text>);
+      const { getByText } = render(
+        <Text type={TextType.Subtitle}>Subtitle Text</Text>
+      );
       const textElement = getByText('Subtitle Text');
       expect(textElement.props.style).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 20,
-            fontWeight: 'bold',
-          }),
+          expect.objectContaining(TextTypeStyles.subtitle),
         ])
       );
     });
 
     it('renders link type with correct styles', () => {
-      const { getByText } = render(<Text type='link'>Link Text</Text>);
+      const { getByText } = render(<Text type={TextType.Link}>Link Text</Text>);
       const textElement = getByText('Link Text');
       expect(textElement.props.style).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            lineHeight: 30,
-            fontSize: 16,
-            color: '#0a7ea4',
-          }),
-        ])
-      );
-    });
-  });
-
-  describe('Theme Color Integration', () => {
-    it('calls useThemeColor with correct parameters for default colors', () => {
-      render(<Text>Test</Text>);
-      expect(mockUseThemeColor).toHaveBeenCalledWith(
-        { light: undefined, dark: undefined },
-        'text'
-      );
-    });
-
-    it('calls useThemeColor with custom light and dark colors', () => {
-      const lightColor = '#ffffff';
-      const darkColor = '#000000';
-      render(
-        <Text lightColor={lightColor} darkColor={darkColor}>
-          Test
-        </Text>
-      );
-      expect(mockUseThemeColor).toHaveBeenCalledWith(
-        { light: lightColor, dark: darkColor },
-        'text'
-      );
-    });
-
-    it('applies theme color to text style', () => {
-      const themeColor = '#ff0000';
-      mockUseThemeColor.mockReturnValue(themeColor);
-
-      const { getByText } = render(<Text>Themed Text</Text>);
-      const textElement = getByText('Themed Text');
-      expect(textElement.props.style).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({
-            color: themeColor,
-          }),
-        ])
-      );
-    });
-
-    it('applies custom light color when provided', () => {
-      const customLightColor = '#blue';
-      render(<Text lightColor={customLightColor}>Test</Text>);
-      expect(mockUseThemeColor).toHaveBeenCalledWith(
-        { light: customLightColor, dark: undefined },
-        'text'
-      );
-    });
-
-    it('applies custom dark color when provided', () => {
-      const customDarkColor = '#darkblue';
-      render(<Text darkColor={customDarkColor}>Test</Text>);
-      expect(mockUseThemeColor).toHaveBeenCalledWith(
-        { light: undefined, dark: customDarkColor },
-        'text'
+        expect.arrayContaining([expect.objectContaining(TextTypeStyles.link)])
       );
     });
   });
@@ -194,18 +104,14 @@ describe('<Text />', () => {
     it('applies custom style along with type styles', () => {
       const customStyle = { marginTop: 10, backgroundColor: 'red' };
       const { getByText } = render(
-        <Text type='title' style={customStyle}>
+        <Text type={TextType.Title} style={customStyle}>
           Styled Text
         </Text>
       );
       const textElement = getByText('Styled Text');
       expect(textElement.props.style).toEqual(
         expect.arrayContaining([
-          expect.objectContaining({
-            fontSize: 32,
-            fontWeight: 'bold',
-            lineHeight: 32,
-          }),
+          expect.objectContaining(TextTypeStyles.title),
           customStyle,
         ])
       );
@@ -245,67 +151,6 @@ describe('<Text />', () => {
     });
   });
 
-  describe('Type Combinations with Colors', () => {
-    it('combines title type with custom colors correctly', () => {
-      const lightColor = '#lightTitle';
-      const darkColor = '#darkTitle';
-      mockUseThemeColor.mockReturnValue('#resolvedTitle');
-
-      const { getByText } = render(
-        <Text type='title' lightColor={lightColor} darkColor={darkColor}>
-          Title with Custom Colors
-        </Text>
-      );
-
-      expect(mockUseThemeColor).toHaveBeenCalledWith(
-        { light: lightColor, dark: darkColor },
-        'text'
-      );
-
-      const textElement = getByText('Title with Custom Colors');
-      const styles = textElement.props.style;
-
-      // Check that styles array contains our expected style objects
-      expect(styles).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ color: '#resolvedTitle' }),
-          expect.objectContaining({
-            fontSize: 32,
-            fontWeight: 'bold',
-            lineHeight: 32,
-          }),
-        ])
-      );
-    });
-
-    it('combines link type with custom colors correctly', () => {
-      const lightColor = '#lightLink';
-      const darkColor = '#darkLink';
-      mockUseThemeColor.mockReturnValue('#resolvedLink');
-
-      const { getByText } = render(
-        <Text type='link' lightColor={lightColor} darkColor={darkColor}>
-          Link with Custom Colors
-        </Text>
-      );
-
-      const textElement = getByText('Link with Custom Colors');
-      const styles = textElement.props.style;
-
-      // Check that styles contains both theme color and link styles
-      expect(styles).toEqual(
-        expect.arrayContaining([
-          expect.objectContaining({ color: '#resolvedLink' }),
-          expect.objectContaining({
-            lineHeight: 30,
-            fontSize: 16,
-            color: '#0a7ea4', // Link's default color
-          }),
-        ])
-      );
-    });
-  });
-
   describe('Complex Style Scenarios', () => {
     it('handles complex style override scenarios', () => {
       const customStyle = {
@@ -315,7 +160,7 @@ describe('<Text />', () => {
       };
 
       const { getByText } = render(
-        <Text type='title' style={customStyle}>
+        <Text type={TextType.Title} style={customStyle}>
           Override Title
         </Text>
       );

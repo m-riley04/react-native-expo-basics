@@ -2,7 +2,7 @@ import { Tabs } from 'expo-router';
 import React from 'react';
 
 import { HapticTab } from '@/components/tabBar/HapticTab';
-import { Colors, DEFAULT_THEME } from '@/constants/Colors';
+import { Colors, DEFAULT_THEME } from '@/constants/style/Colors';
 import { Tab } from '@/enums';
 import { useColorScheme } from '@/theme/hooks/useColorScheme';
 import { useTranslation } from 'react-i18next';
