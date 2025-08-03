@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "analytics-sports-betting",
-    "slug": "analytics-sports-betting",
+    "name": "react-native-expo-basics",
+    "slug": "react-native-expo-basics",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "analyticssportsbetting",
+    "scheme": "reactnativeexpobasics",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -17,7 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.analyticssportsbetting"
+      "package": "com.anonymous.reactnativeexpobasics"
     },
     "web": {
       "bundler": "metro",
